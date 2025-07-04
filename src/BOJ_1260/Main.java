@@ -47,7 +47,7 @@ public class Main {
         bw.close();
     }
 
-    public static void dfs (int v, int [] visited, ArrayList<Integer>[] graph) throws IOException{
+    private static void dfs (int v, int [] visited, ArrayList<Integer>[] graph) throws IOException{
         visited[v] = 1;
         bw.write(v + " ");
         for (int next : graph[v]){
@@ -57,7 +57,7 @@ public class Main {
         }
     }
 
-    public static void bfs(int v, int [] visited, ArrayList<Integer>[] graph) throws IOException{
+    private static void bfs(int v, int [] visited, ArrayList<Integer>[] graph) throws IOException{
         Queue<Integer> queue = new LinkedList<>();
         queue.add(v);
         visited[v] = 1;
