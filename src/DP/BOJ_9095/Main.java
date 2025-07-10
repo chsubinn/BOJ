@@ -3,6 +3,9 @@ package DP.BOJ_9095;
 import java.io.*;
 import java.util.*;
 
+// https://www.acmicpc.net/problem/9095
+// 9095번 1, 2, 3 더하기
+
 public class Main {
     public static void main (String args []) throws IOException {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
