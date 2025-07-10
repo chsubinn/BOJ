@@ -1,4 +1,4 @@
-package BOJ_4963;
+package Graph.BOJ_4963;
 
 import java.io.*;
 import java.util.ArrayList;

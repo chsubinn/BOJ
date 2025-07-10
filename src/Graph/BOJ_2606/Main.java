@@ -1,4 +1,4 @@
-package BOJ_2606;
+package Graph.BOJ_2606;
 
 import java.util.*;
 import java.io.*;

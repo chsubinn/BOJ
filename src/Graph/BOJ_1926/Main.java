@@ -1,4 +1,4 @@
-package BOJ_1926;
+package Graph.BOJ_1926;
 
 import java.io.*;
 import java.util.LinkedList;

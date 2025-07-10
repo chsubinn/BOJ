@@ -1,4 +1,4 @@
-package BOJ_1000;
+package Graph.BOJ_1000;
 
 import java.io.*;
 import java.util.StringTokenizer;

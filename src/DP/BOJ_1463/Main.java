@@ -1,4 +1,4 @@
-package BOJ_1463;
+package DP.BOJ_1463;
 
 import java.io.*;
 import java.util.*;
