@@ -16,52 +16,21 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
-        // 무게 w와 가치 v
-        int [][] graph = new int [n][2];
+        int [] w = new int [n+1];
+        int [] v = new int [n+1];
         int [] dp = new int [k+1];
 
-        for (int i=0; i<n; i++){
+        for (int i=1; i<n+1; i++){
             st = new StringTokenizer(br.readLine(), " ");
-            for (int j=0; j<2; j++){
-                graph[i][j] = Integer.parseInt(st.nextToken());
-            }
-            if (n==1){
-                bw.write(String.valueOf(graph[i][1]));
-                bw.flush();
-                bw.close();
-                return;
-            }
-        }
-        for (int i=0; i<n; i++){
-            dp[graph[i][0]]=graph[i][1];
+            w[i] = Integer.parseInt(st.nextToken());
+            v[i] = Integer.parseInt(st.nextToken());
         }
 
-        for (int i=1; i<=k; i++){
-            System.out.print(dp[i]);
+        for (int i=1; i<n+1; i++){
+            for (int j=k; j-w[i]>=0; j--){ // i번 아이템을 넣어도 되는 한에서 반복문 실행
+                dp[j] = Math.max(dp[j], dp[j-w[i]] + v[i]); // i번 아이템을 넣을만한 무게가 남아있는데 dp로 확인하고 해당 가치 더하기
+            }
         }
-        System.out.println();
-
-
-        for (int i=1; i>=k; i++){
-            if (i%2==0){
-                int cnt = i/2;
-                for (int j=1; j<cnt; j++){
-                    dp[i] = Math.max(dp[i], dp[j]+dp[i-j]);
-                }
-            }
-            else {
-                int cnt = (i - 1)/2;
-                for (int j=1; j<=cnt; j++){
-                    dp[i] = Math.max(dp[i]  , dp[j]+dp[i-j]);
-                }
-            }
-            System.out.print("i="+i+": ");
-            for (int m=1; m<k+1; m++){
-                System.out.print(dp[m]);
-            }
-            System.out.print("\n");
-        }
-
         bw.write(String.valueOf(dp[k]));
         bw.flush();
         bw.close();

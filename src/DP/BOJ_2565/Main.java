@@ -47,6 +47,7 @@ public class Main {
                 if (max_cross == dp[i]){
                     cnt ++;
                     dp[i] = -1;
+
                 }
             }
             max_cross=0;
