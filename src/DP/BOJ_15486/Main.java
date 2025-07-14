@@ -30,7 +30,7 @@ public class Main {
             }
         }
 
-        bw.write(String.valueOf(dp[n]));
+        bw.write(String.valueOf(dp[n+1]));
         bw.flush();
         bw.close();
     }
