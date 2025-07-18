@@ -5,6 +5,7 @@ import java.io.*;
 
 // https://www.acmicpc.net/problem/18310
 // 18310번 안테나
+// 수정: 죄다 돌렸더니 시간 초과가 났다! -> 중앙값이 핵심 ,,
 
 public class Main {
     public static void main (String [] args) throws IOException{
@@ -25,22 +26,22 @@ public class Main {
         int [] dp = new int [100001];
         Arrays.fill(dp, 100000);
 
-        for (int i = graph[0]; i<= graph[n-1]; i++){ // i는 안테나
-            int dist = 0;
-            for (int j = 0; j<n; j++){
-                dist += Math.abs(i-graph[j]);
-            }
-            dp[i] = dist;
-            min_dist = Math.min(min_dist, dist);
-        }
+//        for (int i = graph[0]; i<= graph[n-1]; i++){ // i는 안테나
+//            int dist = 0;
+//            for (int j = 0; j<n; j++){
+//                dist += Math.abs(i-graph[j]);
+//            }
+//            dp[i] = dist;
+//            min_dist = Math.min(min_dist, dist);
+//        }
+//
+//        for (int i=1; i<=100000; i++){
+//            if (min_dist == dp[i]){
+//                answer = Math.min(answer, i);
+//            }
+//        }
 
-        for (int i=1; i<=100000; i++){
-            if (min_dist == dp[i]){
-                answer = Math.min(answer, i);
-            }
-        }
-
-        bw.write(String.valueOf(answer));
+        bw.write(String.valueOf(graph[(n-1)/2]));
         bw.flush();
         bw.close();
     }
