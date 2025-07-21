@@ -5,9 +5,10 @@ import java.util.*;
 
 // https://www.acmicpc.net/problem/1477
 // 1477번 휴게소 세우기
+// 수정 전: 직접 휴게소 개수를 늘려가면서 거리를 쪼개려고 했음,,
+// 수정 후: 전체 도로의 최대 간격을 최소화하는 지점을 찾기 + 찾으면서 횟수랑 맞는지 체크하는 로직!!
 
 public class Main {
-    static int answer = Integer.MAX_VALUE;
     public static void main (String [] args ) throws IOException {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter (System.out));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,48 +20,35 @@ public class Main {
         l = Integer.parseInt(st.nextToken());
 
         st = new StringTokenizer(br.readLine(), " ");
-        int [] graph = new int [n];
-        for (int i=0; i<n; i++){
+        int [] graph = new int [n+2];
+        for (int i=1; i<n+1; i++){
             graph[i] = Integer.parseInt(st.nextToken());
         }
-
+        graph[0] = 0;
+        graph[n+1] = l;
         Arrays.sort(graph);
 
-        int [][] dist = new int [m+1][n+1];
-        int [] cnt = new int [n+1];
+        int left = 1;
+        int right = l-1;
 
-        dist[0][0] = graph[0] - 1;
-        int max_dist = 0;
-        int max_index = 0; // index = 0 에는 m이 아무것도 설치되지 않았을때의 정보 저장
+        while (left <= right){
+            int mid = (left+right)/2;
+            int sum = 0;
 
-        for (int i=1; i<n; i++){
-            dist[0][i] = graph[i] - graph[i-1];
-            if (max_dist < dist[0][i]){
-                max_dist = dist[0][i];
-                max_index = i;
+            for (int i=1; i<graph.length; i++){
+                sum += (graph[i] - graph[i-1] -1)/mid;
             }
-        }
-        dist[0][n] = l - graph[n-1];
 
-        for (int i=1; i<m-1; i++){
-            dist[i][max_index] = dist[i-1][max_index]/2;
-            cnt[i]++;
-            for (int j=1; j<n; j++){
-                if (max_dist < dist[i][j]){
-                    max_dist = dist[i][j];
-                    max_index = j;
-                }
+            if (sum > m){
+                left = mid+1;
+            }
+            else {
+                right = mid-1;
             }
         }
 
-        for (int i=0; i<n+1; i++){
-            if (cnt[i]!=0) {
-                dist[m][i] = dist[m][i]/cnt[i];
-                answer = Math.min(answer, dist[m][i]);
-            }
-        }
 
-        bw.write(String.valueOf(answer));
+        bw.write(String.valueOf(left));
         bw.flush();
         bw.close();
     }
