@@ -6,6 +6,9 @@ import java.util.*;
 // https://www.acmicpc.net/problem/11501
 // 11501번 주식
 
+// 수정 전: 한번 주식이 오른 후에도 더 큰 주가가 발생할 수 있다는 점을 간과함 (예: 10 6 14)
+// 수정 후: 반대로 접근하면 된다!! 천재인듯
+
 public class Main {
     public static void main (String [] args) throws IOException{
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -40,28 +43,13 @@ public class Main {
     }
     private static int solution (int [] graph, int n){
         int profit = 0;
-        int cnt = 0;
-
-        for (int i=0; i <n; i++){
-            if (i < n-1){
-                if (graph[i] <= graph[i+1]){
-                    cnt ++;
-                }
-                else if (graph[i] > graph[i+1]){
-                    int cost = 0;
-                    for (int j=1; j<cnt+1; j++){
-                        cost += graph[i-j];
-                    }
-                    profit += cnt * graph[i] - cost;
-                    cnt = 0;
-                }
+        int maxPrice = 0;
+        for (int i=n-1; i>=0; i--){
+            if (graph[i] > maxPrice){
+                maxPrice = graph[i];
             }
-            if (i==n-1){
-                int cost = 0;
-                for (int j=1; j<cnt+1; j++){
-                    cost += graph[i-j];
-                }
-                profit += cnt * graph[i] - cost;
+            else{
+                profit += maxPrice - graph[i];
             }
         }
         return profit;
