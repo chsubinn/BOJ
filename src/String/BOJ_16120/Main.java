@@ -5,6 +5,8 @@ import java.util.*;
 
 // https://www.acmicpc.net/problem/16120
 // 16120번 PPAP
+// 수정 전: 쓸데없이 while 문을 추가해서 영원히 루프에서 빠져나오지 못함 (ppap 처리를 다 해도 stack이 비지 않을 수 있다는 점 간과)
+
 
 public class Main {
     static String PPAP = "PPAP";
@@ -14,71 +16,31 @@ public class Main {
         BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
 
         String str = br.readLine();
-        char [] arr = str.toCharArray();
-
         Stack<Character> words = new Stack<>();
-        words.add(arr[0]);
 
-        while (!words.isEmpty()){
-            for (int i=1; i<str.length(); i++){
-                words.add(arr[i]);
+        for (int i=0; i<str.length(); i++){
+            words.push(str.charAt(i));
 
-                if (words.size() >= 4){
-                    String checkPPAP = "";
-                    for (int j=i; j<4; j++){
-                        checkPPAP += words.indexOf(j);
+            int len = words.size();
+            if (len >= 4){
+                String checkPPAP = "";
+                if (words.get(len - 4) == 'P' &&
+                    words.get(len - 3) == 'P' &&
+                    words.get(len - 2) == 'A' &&
+                    words.get(len - 1) == 'P') {
+
+                    // 'PPAP' 패턴 제거 후 'P' 추가
+                    for (int j = 0; j < 4; j++) {
+                        words.pop();
                     }
-                    if (checkPPAP.equals(PPAP)){
-                        for (int j=0; j<4; j++){
-                            words.pop();
-                        }
-                        words.add('P');
-                    }
+                    words.push('P');
                 }
             }
-
-            StringBuilder remaining = new StringBuilder();
-            for (char c : words){
-                remaining.append(c);
-            }
-
-            if (words.size() <= 4 && !remaining.equals(PPAP)){
-                bw.write("NP");
-                bw.flush();
-                return;
-            }
         }
+        if (words.size() == 1 && words.pop() == 'P') bw.write("PPAP");
+        else bw.write("NP");
 
-        bw.write(PPAP);
         bw.flush();
         bw.close();
-
-
-        // 시간초과 남
-//        String newStr = "";
-//
-//        while (!newStr.equals(PPAP) && !str.equals(PPAP)){
-//            newStr = "";
-//            String [] splitedStr = str.split(PPAP);
-//            List<String> list = new ArrayList<>(List.of(splitedStr));
-//
-//            list.add(str.indexOf(PPAP), "P");
-//
-//            for (String s : list) {
-//                newStr+=s;
-//            }
-//
-//            if (newStr.length() <= PPAP.length() && !newStr.equals(PPAP)){
-//                bw.write("NP");
-//                bw.flush();
-//                bw.close();
-//                return;
-//            }
-//        }
-//
-//        bw.write(PPAP);
-//        bw.flush();
-//        bw.close();
-
     }
 }
