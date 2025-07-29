@@ -21,24 +21,17 @@ public class Main {
         }
 
         int max = 0;
-        int flag = 0;
         char answer = 'A';
 
-        for (int i=0; i<ALPHABET.length(); i++){
-            if (max < cnt[i]) max = cnt[i];
-        }
-
-        for (int i=0; i<ALPHABET.length(); i++){
-            if (cnt[i] == max){
-                flag ++;
-                answer = ALPHABET.charAt(i);
-            }
-            if (flag > 1){
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] > max) {
+                max = cnt[i];
+                answer = (char)(i + 'A');
+            } else if (cnt[i] == max) {
                 answer = '?';
-                break;
             }
         }
-
+        
         bw.write(answer);
         bw.flush();
         bw.close();
