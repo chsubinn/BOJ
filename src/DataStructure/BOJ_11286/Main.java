@@ -1,4 +1,4 @@
-package etc.BOJ_11286;
+package DataStructure.BOJ_11286;
 
 import java.util.*;
 import java.io.*;
