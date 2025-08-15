@@ -7,12 +7,12 @@ import java.util.*;
 // 16947번 서울 지하철 2호선
 
 public class Main {
-    final static int INF = Integer.MAX_VALUE;
     static int N;
+    static List<Integer>[] graph;
+    static boolean foundCycle;
+    static boolean [] visited;
+    static boolean [] isCycle;
     static int [] dist;
-    static ArrayList<List<Integer>> graph = new ArrayList<>();
-    static ArrayList<Integer> route = new ArrayList<>();
-    static int [] visited;
 
     public static void main (String [] args ) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,81 +21,75 @@ public class Main {
 
         N = Integer.parseInt(st.nextToken());
 
-        dist = new int [N+1];
-        for (int i = 1; i<N+1; i++){
-            dist[i] = INF;
-        }
-
+        graph = new List[N+1];
         for (int i=1; i<N+1; i++){
-            graph.add(new ArrayList<>());
+            graph[i] = new ArrayList<>();
         }
         for (int i=0; i<N; i++){
             st = new StringTokenizer(br.readLine(), " ");
             int v = Integer.parseInt(st.nextToken());
             int u = Integer.parseInt(st.nextToken());
 
-            graph.get(v).add(u);
-            graph.get(u).add(v);
+            graph[v].add(u);
+            graph[u].add(v);
         }
 
-        getRoute(1, 0);
+        visited = new boolean[N + 1];
+        isCycle = new boolean[N + 1];
+        dist = new int[N + 1];
 
-        for (int i=1; i<N+1; i++){
-            if (route.contains(i)) dist[i] = 0;
-            else {
-                for (int r : route){
-                    dist[i] = Math.max(getDistance(i, r), dist[i]);
-                }
-            }
-        }
+        getRoute(1, -1);
 
-        for (int i = 1; i<N+1; i++){
-            System.out.print(dist[i]+" ");
+        getDistance();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            sb.append(dist[i]).append(" ");
         }
+        System.out.println(sb);
     }
-    static private void getRoute (int current, int parent){
-        visited = new int [N+1];
-        visited[current] = 1;
+    static private boolean getRoute (int current, int parent){
+        visited[current] = true;
 
-        for (int i : graph.get(current)){
-            if (visited[i] == 1) route.add(i);
+        for (int  next : graph[current]){
+            if (next == parent) continue;
+
+            if (visited[next]){ // 이미 visited면 사이클 발견으로 간주
+                isCycle[next] = true;
+                isCycle[current] = true;
+                foundCycle = false;
+                return true;
+            }
             else{
-                getRoute(i, current);
-            }
-        }
-    }
-
-    static private int getDistance (int node, int r){
-        int dist = 0;
-
-        int [] visited = new int [N+1];
-        Queue<Integer> queue = new LinkedList<>();
-        HashMap<Integer, Integer> info = new HashMap<>();
-
-        queue.add(node);
-        info.put(node, 0);
-
-        while (!queue.isEmpty()){
-            int n = queue.remove();
-            int cd = info.get(n);
-
-            if (n == r) return cd;
-
-            for (int i : graph.get(n)){
-                if (visited[i]==0) {
-                    queue.add(i);
-                    info.put(i, cd+1);
+                if (getRoute(next, current)) {
+                    if (!foundCycle) isCycle[current] = true;
+                    if (isCycle[current] && current == next) foundCycle = true;
+                    return !foundCycle; // 마킹 계속할지 여부
                 }
             }
         }
-        return dist;
+        return isCycle[current];
     }
-    static private class Pair {
-        int node, dist;
-        Pair(int node, int dist){
-            this.node = node;
-            this.dist = dist;
+
+    static private void getDistance (){
+        Arrays.fill(dist, -1);
+        Queue<Integer> q = new LinkedList<>();
+
+        for (int i = 1; i <= N; i++) {
+            if (isCycle[i]) {
+                dist[i] = 0;
+                q.add(i);
+            }
         }
 
+        while (!q.isEmpty()) {
+            int cur = q.remove();
+            for (int next : graph[cur]) {
+                if (dist[next] == -1) {
+                    dist[next] = dist[cur] + 1;
+                    q.offer(next);
+                }
+            }
+        }
     }
 }
