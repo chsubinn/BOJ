@@ -81,7 +81,7 @@ public class Main {
             }
             killed.clear();
 
-            for (int r = 0; r<=N-1; r++){
+            for (int r = N-1; r>=0; r--){
                 for (int c = 0; c<M; c++){
                     if (copy[r][c] == 1){
                         if (r+1 == N){
@@ -108,7 +108,7 @@ public class Main {
                     int d = Math.abs(i - arch.r) + Math.abs(j - arch.c);
 
                     if (d<=D){
-                        if (d < min || (d == min && j < target.c)){
+                        if (d < min || (d == min && (target == null || j < target.c))){
                             min = d;
                             target = new Pair(i, j);
                         }
