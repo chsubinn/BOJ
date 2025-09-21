@@ -1,37 +1,43 @@
 package DP.BOJ_12865;
 
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 // https://www.acmicpc.net/problem/12865
 // 12865번 평범한 배낭
 
 public class Main {
-    public static void main (String args []) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static int N, K;
+    static int [][] items;
+    static int [] backpack;
+    public static void main (String [] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
-        int n, k;
-        n = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
 
-        int [] w = new int [n+1];
-        int [] v = new int [n+1];
-        int [] dp = new int [k+1];
+        items = new int [N][2];
+        backpack = new int [K+1]; // 무게가 k일 때의 최대 가치
 
-        for (int i=1; i<n+1; i++){
+        for (int i=0; i<N; i++){
             st = new StringTokenizer(br.readLine(), " ");
-            w[i] = Integer.parseInt(st.nextToken());
-            v[i] = Integer.parseInt(st.nextToken());
+            items[i][0] = Integer.parseInt(st.nextToken()); // w
+            items[i][1] = Integer.parseInt(st.nextToken()); // v
         }
+        Arrays.sort(items, Comparator.comparingInt(a -> a[1]));
 
-        for (int i=1; i<n+1; i++){
-            for (int j=k; j-w[i]>=0; j--){ // i번 아이템을 넣어도 되는 한에서 반복문 실행
-                dp[j] = Math.max(dp[j], dp[j-w[i]] + v[i]); // i번 아이템을 넣을만한 무게가 남아있는데 dp로 확인하고 해당 가치 더하기
+        for (int i=0; i<N; i++){
+            int w = items[i][0];
+            int v = items[i][1];
+
+            for (int j=K; j>= w; j--){ // 7 - 3
+                backpack[j] = Math.max(backpack[j], v + backpack[j-w]);
             }
         }
-        bw.write(String.valueOf(dp[k]));
+
+        bw.write(String.valueOf(backpack[K]));
         bw.flush();
         bw.close();
     }
