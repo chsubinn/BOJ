@@ -3,7 +3,7 @@
 //import java.util.*;
 //import java.io.*;
 //
-//public class Main {
+//public class Simulation.BOJ_20291.Main {
 //    static int N, L, R;
 //    static int [][] graph;
 //    static int answer = 0;
